@@ -1,0 +1,12 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    etcd (0.2.3)
+      mixlib-log
+    mixlib-log (1.6.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  etcd
