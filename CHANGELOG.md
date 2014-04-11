@@ -1,3 +1,7 @@
+## v0.0.5 - 11 April 2014
+
+lower case JSON, use hash instead of attributes for host
+
 ## v0.0.4 - 11 April 2014
 
 Allow host to specify scheme

@@ -1,42 +1,37 @@
-class Hash
-  def capitalize_keys
-    new_hash = {}
-    self.each do |k,v|
-      new_hash[k.to_s.capitalize] = v
-    end
-    return new_hash
-  end
-end
-
 module EtcdDiscovery
+  class InvalidHost < RuntimeError
+  end
+
   class Host
-    attr_accessor :hostname, :port, :user, :password, :scheme
+    attr_accessor :attributes
 
     def initialize(arg)
       if arg.is_a? Etcd::Node
-        params = JSON.parse arg.value
+        @attributes = JSON.parse arg.value
       elsif arg.is_a? Hash
-        params = arg.capitalize_keys
+        @attributes = arg
       else
         raise TypeError, "requires a Etcd::Node or a Hash, not a #{arg.class}"
       end
-      @hostname = params['Name']
-      @port = params['Port']
-      @user = params['User']
-      @password = params['Password']
-      @scheme = params['Scheme'] || "http"
-
-      if @hostname.nil? or @hostname.empty?
-        @hostname = Socket.gethostname
+      if !attributes.has_key? 'name' or !attributes.has_key? 'port'
+        raise InvalidHost, "attributes 'name' and 'port' should be defined"
       end
+      @user = params['user'] || ""
+      @password = params['password'] || ""
+      @scheme = params['scheme'] || "http"
     end
 
     def to_json
-      {"Name" => hostname, "Port" => port, "Scheme" => scheme, "User" => user, "Password" => password}.to_json
+      attributes.to_json
     end
 
     def to_uri
-      URI("#{scheme}://#{user}:#{password}@#{hostname}:#{port}")
+      a = attributes # Shorten name
+      URI("#{a['scheme']}://#{a['user']}:#{a['password']}@#{a['name']}:#{a['port']}")
+    end
+
+    def to_s
+      self.to_uri.to_s
     end
   end
 end
