@@ -10,7 +10,7 @@ end
 
 module EtcdDiscovery
   class Host
-    attr_accessor :hostname, :port, :user, :password
+    attr_accessor :hostname, :port, :user, :password, :scheme
 
     def initialize(arg)
       if arg.is_a? Etcd::Node
@@ -24,6 +24,7 @@ module EtcdDiscovery
       @port = params['Port']
       @user = params['User']
       @password = params['Password']
+      @scheme = params['Scheme'] || "http"
 
       if @hostname.nil? or @hostname.empty?
         @hostname = Socket.gethostname
@@ -31,11 +32,11 @@ module EtcdDiscovery
     end
 
     def to_json
-      {"Name" => @hostname, "Port" => @port, "User" => @user, "Password" => @password}.to_json
+      {"Name" => hostname, "Port" => port, "Scheme" => scheme, "User" => user, "Password" => password}.to_json
     end
 
     def to_uri
-      URI("http://#{user}:#{password}@#{hostname}:#{port}")
+      URI("#{scheme}://#{user}:#{password}@#{hostname}:#{port}")
     end
   end
 end

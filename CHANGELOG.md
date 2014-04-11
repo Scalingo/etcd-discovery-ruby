@@ -1,3 +1,7 @@
+## v0.0.4 - 11 April 2014
+
+Allow host to specify scheme
+
 ## v0.0.3 - 11 April 2014
 
 Add etcd as gem dependency
