@@ -27,7 +27,11 @@ module EtcdDiscovery
 
     def to_uri
       a = attributes # Shorten name
-      URI("#{a['scheme']}://#{a['user']}:#{a['password']}@#{a['name']}:#{a['port']}")
+      if a['user'].empty?
+        URI("#{a['scheme']}://#{a['name']}:#{a['port']}")
+      else
+        URI("#{a['scheme']}://#{a['user']}:#{a['password']}@#{a['name']}:#{a['port']}")
+      end
     end
 
     def to_s

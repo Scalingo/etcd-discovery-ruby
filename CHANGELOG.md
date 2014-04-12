@@ -1,3 +1,7 @@
+## v0.0.8 - 12 April 2014
+
+Generate clean URL when no authorization is required
+
 ## v0.0.7 - 12 April 2014
 
 Fix host class, remove instance variables
