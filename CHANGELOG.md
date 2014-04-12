@@ -1,3 +1,7 @@
+## v0.0.6 - 12 April 2014
+
+Don't use environment to setup SSL parameters
+
 ## v0.0.5 - 11 April 2014
 
 lower case JSON, use hash instead of attributes for host
