@@ -1,3 +1,7 @@
+## v0.0.7 - 12 April 2014
+
+Fix host class, remove instance variables
+
 ## v0.0.6 - 12 April 2014
 
 Don't use environment to setup SSL parameters

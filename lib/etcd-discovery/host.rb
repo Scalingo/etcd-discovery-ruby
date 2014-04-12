@@ -16,9 +16,9 @@ module EtcdDiscovery
       if !attributes.has_key? 'name' or !attributes.has_key? 'port'
         raise InvalidHost, "attributes 'name' and 'port' should be defined"
       end
-      @user = params['user'] || ""
-      @password = params['password'] || ""
-      @scheme = params['scheme'] || "http"
+      attributes['user'] = "" if attributes['user'].nil?
+      attributes['password'] = "" if attributes['password'].nil?
+      attributes['scheme'] = "http" if attributes['scheme'].nil?
     end
 
     def to_json
