@@ -37,7 +37,7 @@ module EtcdDiscovery
       value = h.to_json
 
       while true
-        client.set("/services/#{service}/#{h.hostname}", value: value, ttl: config.register_ttl)
+        client.set("/services/#{service}/#{h.attributes['name']}", value: value, ttl: config.register_ttl)
         sleep config.register_renew
       end
     end

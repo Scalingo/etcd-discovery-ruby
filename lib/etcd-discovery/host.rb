@@ -13,7 +13,7 @@ module EtcdDiscovery
       else
         raise TypeError, "requires a Etcd::Node or a Hash, not a #{arg.class}"
       end
-      if !attributes.has_key? 'name' or !attributes.has_key? 'port'
+      if !attributes.has_key?('name') or !attributes.has_key?('port')
         raise InvalidHost, "attributes 'name' and 'port' should be defined"
       end
       attributes['user'] = "" if attributes['user'].nil?

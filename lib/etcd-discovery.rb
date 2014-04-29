@@ -26,6 +26,12 @@ module EtcdDiscovery
   end
 
   def self.register(service, host)
-    Thread.new { Service.register(service, host) }
+    Thread.new {
+      begin
+        Service.register(service, host)
+      rescue => e
+        puts "Fail to register #{service}: #{e.class} #{e} #{e.backtrace}"
+      end
+    }
   end
 end
