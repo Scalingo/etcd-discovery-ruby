@@ -1,6 +1,7 @@
-## v0.0.8 - 12 April 2014
+## v0.0.8 - 30 April 2014
 
 Generate clean URL when no authorization is required
+Fix registration according to 0.0.7
 
 ## v0.0.7 - 12 April 2014
 
