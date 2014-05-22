@@ -35,9 +35,14 @@ module EtcdDiscovery
       config = EtcdDiscovery.config
       client = config.client
       value = h.to_json
+      key_name = "/services/#{service}/#{h.attributes['name']}"
 
       while true
-        client.set("/services/#{service}/#{h.attributes['name']}", value: value, ttl: config.register_ttl)
+        begin
+          client.set(key_name, value: value, ttl: config.register_ttl)
+        rescue => e
+          puts "Fail to set #{key_name}: #{e}, #{e.message}, #{e.class}"
+        end
         sleep config.register_renew
       end
     end

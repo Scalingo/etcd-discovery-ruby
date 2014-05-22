@@ -1,3 +1,7 @@
+## v0.0.9 - 22 May 2014
+
+Don't stop registering after failing to set a key
+
 ## v0.0.8 - 30 April 2014
 
 Generate clean URL when no authorization is required
