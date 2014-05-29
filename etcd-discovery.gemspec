@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name        = 'etcd-discovery'
-  s.version     = '0.0.9'
-  s.date        = '2014-04-30'
+  s.version     = '0.0.10'
+  s.date        = '2014-05-29'
   s.summary     = "Service discovery based on etcd"
   s.description = "Ruby implementation of a service discovery tool based on etcd"
   s.authors     = ["Léo Unbekandt"]

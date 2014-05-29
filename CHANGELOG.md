@@ -1,3 +1,7 @@
+## v0.0.10 - 29 May 2014
+
+Use logger instead of simple puts for registering errors
+
 ## v0.0.9 - 22 May 2014
 
 Don't stop registering after failing to set a key

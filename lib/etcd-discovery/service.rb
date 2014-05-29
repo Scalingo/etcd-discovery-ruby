@@ -24,6 +24,8 @@ module EtcdDiscovery
     end
 
     def self.register(service, host)
+      logger = Logger.new($stdout)
+
       if host.is_a? Hash
         h = Host.new host
       elsif host.is_a? Etcd::Host
@@ -41,7 +43,7 @@ module EtcdDiscovery
         begin
           client.set(key_name, value: value, ttl: config.register_ttl)
         rescue => e
-          puts "Fail to set #{key_name}: #{e}, #{e.message}, #{e.class}"
+          logger.warn "Fail to set #{key_name}: #{e}, #{e.message}, #{e.class}"
         end
         sleep config.register_renew
       end
