@@ -13,24 +13,23 @@ module EtcdDiscovery
       else
         raise TypeError, "requires a Etcd::Node or a Hash, not a #{arg.class}"
       end
-      if !attributes.has_key?('name') or !attributes.has_key?('port')
-        raise InvalidHost, "attributes 'name' and 'port' should be defined"
+      if !attributes.has_key?('name') or !attributes.has_key?('ports')
+        raise InvalidHost, "attributes 'name' and 'ports' should be defined"
       end
       attributes['user'] = "" if attributes['user'].nil?
       attributes['password'] = "" if attributes['password'].nil?
-      attributes['scheme'] = "http" if attributes['scheme'].nil?
     end
 
     def to_json
       attributes.to_json
     end
 
-    def to_uri
+    def to_uri(scheme = "http")
       a = attributes # Shorten name
       if a['user'].empty?
-        URI("#{a['scheme']}://#{a['name']}:#{a['port']}")
+        URI("#{scheme}://#{a['name']}:#{a['ports'][scheme]}")
       else
-        URI("#{a['scheme']}://#{a['user']}:#{a['password']}@#{a['name']}:#{a['port']}")
+        URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['name']}:#{a['ports'][scheme]}")
       end
     end
 

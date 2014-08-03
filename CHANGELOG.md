@@ -1,3 +1,7 @@
+## v0.0.11 - 3 Aug 2014
+
+Service as a Hash of interfaces with its port
+
 ## v0.0.10 - 29 May 2014
 
 Use logger instead of simple puts for registering errors
