@@ -1,3 +1,13 @@
+## v0.0.12 - 7 Jan 2014
+
+Stop registration is now possible
+
+```ruby
+r = EtcdDiscovery.new(service, host).register
+…
+r.stop
+```
+
 ## v0.0.11 - 3 Aug 2014
 
 Service as a Hash of interfaces with its port

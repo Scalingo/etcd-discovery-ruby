@@ -24,29 +24,7 @@ module EtcdDiscovery
     end
 
     def self.register(service, host)
-      logger = Logger.new($stdout)
-
-      if host.is_a? Hash
-        h = Host.new host
-      elsif host.is_a? Etcd::Host
-        h = host
-      else
-        raise TypeError, "host should be a Hash or a Etcd::Host, is a #{host.class}"
-      end
-
-      config = EtcdDiscovery.config
-      client = config.client
-      value = h.to_json
-      key_name = "/services/#{service}/#{h.attributes['name']}"
-
-      while true
-        begin
-          client.set(key_name, value: value, ttl: config.register_ttl)
-        rescue => e
-          logger.warn "Fail to set #{key_name}: #{e}, #{e.message}, #{e.class}"
-        end
-        sleep config.register_renew
-      end
+      EtcdDiscovery::Registrar.new(service, host).register
     end
   end
 end
