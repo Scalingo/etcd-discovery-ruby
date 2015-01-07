@@ -31,6 +31,11 @@ module EtcdDiscovery
     end
 
     def register
+      if @state == :started
+        logger.warn "#{@service} is already registered"
+        return
+      end
+
       @state = :started
       value = @host.to_json
 
