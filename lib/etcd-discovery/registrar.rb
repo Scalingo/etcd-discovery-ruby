@@ -32,7 +32,7 @@ module EtcdDiscovery
 
     def register
       if @state == :started
-        logger.warn "#{@service} is already registered"
+        @logger.warn "#{@service} is already registered"
         return
       end
 
