@@ -1,4 +1,15 @@
 module EtcdDiscovery
+  class InvalidStateError < StandardError
+    def initialize(current, expected)
+      @current = current
+      @expected = expected
+    end
+
+    def message
+      "Registrar is #{@current}, expected #{@expected}"
+    end
+  end
+
   class Registrar
     attr_reader :state
     attr_reader :thread
@@ -21,27 +32,41 @@ module EtcdDiscovery
 
     def register
       @state = :started
-      config = EtcdDiscovery.config
-      client = config.client
       value = @host.to_json
-      key_name = "/services/#{@service}/#{@host.attributes['name']}"
 
       @thread = Thread.new {
+        @logger.warn "Register '#{@service}' started"
         while @state == :started
           begin
-            client.set(key_name, value: value, ttl: config.register_ttl)
+            client.set(key, value: value, ttl: config.register_ttl)
           rescue => e
-            logger.warn "Fail to set #{key_name}: #{e}, #{e.message}, #{e.class}"
+            @logger.warn "Fail to set #{key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
         end
-        logger.warn "Register '#{@service}' stopped"
+        @logger.warn "Register '#{@service}' stopped"
       }
       self
     end
 
     def stop
+      raise InvalidStateError.new(@state, :started) if @state != :started
+      @logger.debug "Set state to :stopped"
       @state = :stopped
+      @logger.debug "Delete #{key}"
+      client.delete(key)
+    end
+
+    def client
+      config.client
+    end
+
+    def config
+      EtcdDiscovery.config
+    end
+
+    def key
+      "/services/#{@service}/#{@host.attributes['name']}"
     end
   end
 end
