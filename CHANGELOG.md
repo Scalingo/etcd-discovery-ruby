@@ -1,3 +1,7 @@
+## v0.1.3 - 29 Jun 2016
+
+* `EtcdDiscovery::Hosts#to_uri` returns https in priority, then http
+
 ## v0.0.12 - 7 Jan 2014
 
 Stop registration is now possible

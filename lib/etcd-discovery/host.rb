@@ -24,7 +24,11 @@ module EtcdDiscovery
       attributes.to_json
     end
 
-    def to_uri(scheme = "http")
+    def to_uri(schemes = ["https", "http"])
+      schemes = [schemes] if !schemes.is_a?(Array)
+      scheme = schemes.select{|s|
+        !a['ports'][s].nil?
+      }.first
       a = attributes # Shorten name
       if a['user'].empty?
         URI("#{scheme}://#{a['name']}:#{a['ports'][scheme]}")
