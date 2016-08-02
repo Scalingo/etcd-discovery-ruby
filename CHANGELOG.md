@@ -1,3 +1,11 @@
+## v0.1.5 - 2 Aug 2016
+
+* Default ETCD config to port 2379
+
+## v0.1.4 - 29 Jun 2016
+
+* Minor fix
+
 ## v0.1.3 - 29 Jun 2016
 
 * `EtcdDiscovery::Hosts#to_uri` returns https in priority, then http

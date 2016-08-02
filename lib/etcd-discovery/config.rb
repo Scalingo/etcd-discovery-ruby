@@ -10,7 +10,7 @@ module EtcdDiscovery
     def initialize
       @use_ssl = false
       @host = "localhost"
-      @port = "4001"
+      @port = "2379"
       @register_ttl = 10
       @register_renew = 8
     end
