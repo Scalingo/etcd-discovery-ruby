@@ -3,10 +3,10 @@ GEM
   specs:
     coderay (1.1.0)
     diff-lcs (1.2.5)
-    etcd (0.2.4)
+    etcd (0.3.0)
       mixlib-log
     method_source (0.8.2)
-    mixlib-log (1.6.0)
+    mixlib-log (1.7.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -36,3 +36,6 @@ DEPENDENCIES
   pry
   rspec
   rspec-its
+
+BUNDLED WITH
+   1.14.6

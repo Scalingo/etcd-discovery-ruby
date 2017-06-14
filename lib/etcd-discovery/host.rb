@@ -37,6 +37,23 @@ module EtcdDiscovery
       end
     end
 
+    def to_private_uri(schemes = ["https", "http"])
+      a = attributes
+      if a['private_hostname'].empty?
+        return self.to_uri(schemes)
+      end
+      schemes = [schemes] if !schemes.is_a?(Array)
+      scheme = schemes.select{ |s|
+        !a['private_ports'][s].nil?
+      }.first
+
+      if a['user'].empty?
+        URI("#{scheme}://#{a['private_hostname']}:#{a['private_ports'][scheme]}")
+      else
+        URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['private_hostname']}:#{a['private_ports'][scheme]}")
+      end
+    end
+
     def to_s
       self.to_uri.to_s
     end

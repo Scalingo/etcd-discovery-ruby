@@ -27,6 +27,6 @@ module EtcdDiscovery
   end
 
   def self.register(service, host)
-    Service.register(service, host)
+    Registration.register(service, host)
   end
 end
