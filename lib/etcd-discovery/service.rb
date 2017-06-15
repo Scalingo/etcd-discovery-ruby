@@ -62,5 +62,9 @@ module EtcdDiscovery
         URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['hostname']}:#{a['ports'][scheme]}")
       end
     end
+
+    def to_json
+      attributes.to_json
+    end
   end
 end
