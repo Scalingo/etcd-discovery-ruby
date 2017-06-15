@@ -68,8 +68,8 @@ module EtcdDiscovery
     end
 
     def set_credentials(user, password)
-      @atrributes['user'] = user
-      @atrributes['password'] = password
+      @attributes['user'] = user
+      @attributes['password'] = password
     end
   end
 end
