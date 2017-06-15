@@ -15,8 +15,11 @@ module EtcdDiscovery
   class Registrar
     attr_reader :state
     attr_reader :thread
+    attr_reader :watcher
     attr_reader :host
     attr_reader :service
+    attr_reader :user
+    attr_reader :password
 
     def initialize(service, host)
       @logger = Logger.new($stdout)
@@ -31,6 +34,8 @@ module EtcdDiscovery
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
+      @user     = host.attributes['user']
+      @password = host.attributes['password']
     end
 
     def register
@@ -44,12 +49,26 @@ module EtcdDiscovery
 
       service_value = @service.to_json
 
+      if @service.attributes['public']
+        @watcher = Thread.new {
+          @logger.warn "Watcher #{@service.attributes['name']} started"
+          index = 0
+          while @state == :started
+            resp = client.watch service_key, {index: index}
+            value = JSON.parse resp.node.value
+            @user = value['user']
+            @password = value['password']
+            index = resp.etcd_index
+          end
+        }
+      end
+
+      client.set(service_key, value: service_value)
       @thread = Thread.new {
         @logger.warn "Register '#{@service}' started"
         while @state == :started
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
-            client.set(service_key, value: service_value)
           rescue => e
             @logger.warn "Fail to set #{key}: #{e}, #{e.message}, #{e.class}"
           end
@@ -57,7 +76,9 @@ module EtcdDiscovery
         end
         @logger.warn "Register '#{@service}' stopped"
       }
-      self
+
+
+      return self
     end
 
     def stop
@@ -92,8 +113,8 @@ module EtcdDiscovery
         'password' => host.attributes['password'],
         'public' =>   host.attributes['public']
       }
-      params['hostname'] = host.attributes['name']      if params['public']
-      params['ports'] = host.attributes['ports'] if params['public']
+      params['hostname'] = host.attributes['name']if params['public']
+      params['ports'] = host.attributes['ports']  if params['public']
       return params
     end
   end
