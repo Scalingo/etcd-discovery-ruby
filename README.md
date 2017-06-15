@@ -23,10 +23,22 @@ end
 ### Get hosts for a particular service
 
 ```ruby
-hosts = EtcdDiscovery.get "service"
+hosts = EtcdDiscovery.get("service").all
 hosts.each do |h|
   puts h.to_uri
 end
+```
+
+### Get the service plublic uri
+
+```ruby
+EtcdDiscovery.get('service').to_uri
+```
+
+### Get the private_uri to one of the nodes
+
+```ruby
+EtcdDiscovery.get('service').one.to_uri
 ```
 
 ### Register a service
@@ -34,6 +46,33 @@ end
 This will be run in a secondary thread.
 
 ```ruby
-EtcdDiscovery.register "service", name: "hostname", port: "12345", user: "testuser", password: "secret"
+EtcdDiscovery.register "service", {
+  'name' => "hostname",
+  'port' => {
+    'http'=> '80',
+    'https' => '443'
+  },
+  'user' => "testuser",
+  'password' => "secret",
+  'public' => true,
+  'critical' => true,
+  'private_hostname' => 'my-host.internal.com',
+  'private_ports' => {
+    'http' => '8080',
+    'https' => '80443'
+  }
+}
 ```
 
+### Listen to credentials change
+
+When a service is public, user and password are synced accross all the hosts of the service.
+
+You can fetch the current user and password using the object returned by the register method.
+
+```ruby
+registration = EtcdDiscovery.register service, host
+
+registration.user     # The current user (it can change at any time)
+registration.password # The current password (it can change at any time)
+```

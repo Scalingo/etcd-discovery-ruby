@@ -1,3 +1,11 @@
+## v1.0.0 - 16 Jun 2017
+
+* Add the service information
+* Update the get api
+* Update the register method to update the services_infos key
+* Add the credentials watcher
+* Add the private_uri methods
+
 ## v0.1.5 - 2 Aug 2016
 
 * Default ETCD config to port 2379
