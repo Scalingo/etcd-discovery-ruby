@@ -66,5 +66,10 @@ module EtcdDiscovery
     def to_json
       attributes.to_json
     end
+
+    def set_credentials(user, password)
+      @atrributes['user'] = user
+      @atrributes['password'] = password
+    end
   end
 end

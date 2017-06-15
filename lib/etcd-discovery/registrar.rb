@@ -34,8 +34,8 @@ module EtcdDiscovery
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
-      @user     = host.attributes['user']
-      @password = host.attributes['password']
+      @user     = @host.attributes['user']
+      @password = @host.attributes['password']
     end
 
     def register
@@ -45,7 +45,6 @@ module EtcdDiscovery
       end
 
       @state = :started
-      value = @host.to_json
 
       service_value = @service.to_json
 
@@ -58,6 +57,8 @@ module EtcdDiscovery
             value = JSON.parse resp.node.value
             @user = value['user']
             @password = value['password']
+            @host.set_credentials user, password
+            @service.set_credentials user, password
             index = resp.etcd_index
           end
         }
@@ -67,6 +68,7 @@ module EtcdDiscovery
       @thread = Thread.new {
         @logger.warn "Register '#{@service}' started"
         while @state == :started
+          value = @host.to_json
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
           rescue => e

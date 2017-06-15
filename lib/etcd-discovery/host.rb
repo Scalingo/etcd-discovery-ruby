@@ -54,6 +54,11 @@ module EtcdDiscovery
       end
     end
 
+    def set_credentials(user, password)
+      @attributes['user'] = user
+      @attributes['password'] = password
+    end
+
     def to_s
       self.to_uri.to_s
     end
