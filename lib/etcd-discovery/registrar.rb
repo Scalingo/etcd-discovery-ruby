@@ -48,7 +48,8 @@ module EtcdDiscovery
 
       service_value = @service.to_json
 
-      if @service.attributes['public']
+      # Do not start credentials synchro if the service is not public or has no credentials
+      if @service.attributes['public'] && (@service.attributes['user'].present? || @service.attributes['password'].present?)
         @watcher = Thread.new {
           @logger.warn "Watcher #{@service.attributes['name']} started"
           index = 0
