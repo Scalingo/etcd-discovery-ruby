@@ -47,8 +47,8 @@ This will be run in a secondary thread.
 
 ```ruby
 EtcdDiscovery.register "service", {
-  'name' => "hostname",                         # Mendatory: The hostname of the service
-  'ports' => {                                  # Mendatory: The ports openned by the service
+  'name' => "hostname",                         # Mandatory: The hostname of the service
+  'ports' => {                                  # Mandatory: The ports openned by the service
     'http'=> '80',
     'https' => '443'
   },
