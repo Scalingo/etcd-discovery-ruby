@@ -23,17 +23,55 @@ end
 ### Get hosts for a particular service
 
 ```ruby
-hosts = EtcdDiscovery.get "service"
+hosts = EtcdDiscovery.get("service").all
 hosts.each do |h|
   puts h.to_uri
 end
 ```
 
+### Get the service plublic uri
+
+```ruby
+EtcdDiscovery.get('service').to_uri
+```
+
+### Get the private_uri to one of the nodes
+
+```ruby
+EtcdDiscovery.get('service').one.to_uri
+```
+
 ### Register a service
 
 This will be run in a secondary thread.
-
 ```ruby
-EtcdDiscovery.register "service", name: "hostname", port: "12345", user: "testuser", password: "secret"
+EtcdDiscovery.register "service", {
+  'name' => "hostname",                         # Mandatory: The hostname of the service
+  'ports' => {                                  # Mandatory: The ports opened by the service
+    'http'=> '80',
+    'https' => '443'
+  },
+  'user' => "testuser",                         # Optional: If your service use basic auth: the username to access your service
+  'password' => "secret",                       # Optional: If your service use basic auth: the password to access your service
+  'public' => true,                             # Optional: Is your service accessible via an external network (or via a load balancer). Setting this to true will enable credentials synchronization.
+  'critical' => true,                           # Optional: Is your service critical? This is just a tag and have no impact on the registration process
+  'private_hostname' => 'my-host.internal.com', # Optional: The hostname of the service in the private network
+  'private_ports' => {                          # Optional: The ports of the service in the private network
+    'http' => '8080',
+    'https' => '80443'
+  }
+}
 ```
 
+### Listen to credentials change
+
+When a service is public, user and password are synced across all the hosts of the service.
+
+You can fetch the current user and password using the object returned by the register method.
+
+```ruby
+registration = EtcdDiscovery.register service, host
+
+registration.user     # The current user (it can change at any time)
+registration.password # The current password (it can change at any time)
+```
