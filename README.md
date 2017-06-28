@@ -29,7 +29,7 @@ hosts.each do |h|
 end
 ```
 
-### Get the service plublic uri
+### Get the service public uri
 
 ```ruby
 EtcdDiscovery.get('service').to_uri
