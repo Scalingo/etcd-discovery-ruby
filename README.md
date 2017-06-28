@@ -47,17 +47,17 @@ This will be run in a secondary thread.
 
 ```ruby
 EtcdDiscovery.register "service", {
-  'name' => "hostname",
-  'port' => {
+  'name' => "hostname",                         # Mendatory: The hostname of the service
+  'ports' => {                                  # Mendatory: The ports openned by the service
     'http'=> '80',
     'https' => '443'
   },
-  'user' => "testuser",
-  'password' => "secret",
-  'public' => true,
-  'critical' => true,
-  'private_hostname' => 'my-host.internal.com',
-  'private_ports' => {
+  'user' => "testuser",                         # Optionnal: If your service use basic auth: the username to access your service
+  'password' => "secret",                       # Optionnal: If your service use basic auth: the password to access your service
+  'public' => true,                             # Optionnal: Is your service accessible via an external network (or via a load balancer). Setting this to true will enable credentials synchronisation.
+  'critical' => true,                           # Optionnal: Is your service critical? This is just a tag and have no impact on the registration process
+  'private_hostname' => 'my-host.internal.com', # Optionnal: The hostname of the service in the private network
+  'private_ports' => {                          # Optionnal: The ports of the service in the private network
     'http' => '8080',
     'https' => '80443'
   }
