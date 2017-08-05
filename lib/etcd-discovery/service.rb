@@ -56,7 +56,7 @@ module EtcdDiscovery
       scheme = schemes.select{|s|
         !a['ports'][s].nil?
       }.first
-      if a['user'].empty?
+      if a['user'].nil? || a['user'] == ""
         URI("#{scheme}://#{a['hostname']}:#{a['ports'][scheme]}")
       else
         URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['hostname']}:#{a['ports'][scheme]}")
