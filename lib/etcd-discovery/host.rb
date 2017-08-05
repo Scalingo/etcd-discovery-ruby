@@ -47,7 +47,7 @@ module EtcdDiscovery
         !a['private_ports'][s].nil?
       }.first
 
-      if a['user'].empty?
+      if a['user'].nil? || a['user'] == ""
         URI("#{scheme}://#{a['private_hostname']}:#{a['private_ports'][scheme]}")
       else
         URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['private_hostname']}:#{a['private_ports'][scheme]}")
