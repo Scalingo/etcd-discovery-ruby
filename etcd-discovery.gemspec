@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
   s.name        = 'etcd-discovery'
-  s.version     = '1.0.2'
-  s.date        = '2017-06-28'
+  s.version     = '1.0.3'
+  s.date        = '2017-11-14'
   s.summary     = 'Service discovery based on etcd'
   s.description = 'Ruby implementation of a service discovery tool based on etcd'
   s.authors     = ['Léo Unbekandt']
-  s.email       = 'leo.unbekandt@scalingo.com'
+  s.email       = 'leo@scalingo.com'
   s.files       = [
     'lib/etcd-discovery.rb',
     'lib/etcd-discovery/client.rb',

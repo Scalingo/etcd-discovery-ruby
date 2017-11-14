@@ -73,7 +73,7 @@ module EtcdDiscovery
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
           rescue => e
-            @logger.warn "Fail to set #{key}: #{e}, #{e.message}, #{e.class}"
+            @logger.warn "Fail to set #{service_key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
         end

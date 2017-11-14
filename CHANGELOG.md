@@ -1,3 +1,7 @@
+## v1.0.3 - 14 Nov 2017
+
+* Fix unexisting variable in registration exception handling
+
 ## v1.0.0 - 16 Jun 2017
 
 * Add the service information
