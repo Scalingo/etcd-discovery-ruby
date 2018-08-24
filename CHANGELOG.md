@@ -1,4 +1,4 @@
-## v1.0.4 - 24 Aug 2018
+## v1.0.4/5 - 24 Aug 2018
 
 * Fix bug when service is using old version of protocol without /services_infos
 

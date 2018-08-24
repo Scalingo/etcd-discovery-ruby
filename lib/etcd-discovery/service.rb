@@ -23,7 +23,7 @@ module EtcdDiscovery
         service = client.get("/services_infos/#{service}")
         return self.new service.node
       rescue Etcd::KeyNotFound
-        return self.new name: service
+        return self.new({'name' => service})
       end
     end
 
