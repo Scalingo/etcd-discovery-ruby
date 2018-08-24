@@ -1,3 +1,7 @@
+## v1.0.4 - 24 Aug 2018
+
+* Fix bug when service is using old version of protocol without /services_infos
+
 ## v1.0.3 - 14 Nov 2017
 
 * Fix unexisting variable in registration exception handling
