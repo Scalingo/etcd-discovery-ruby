@@ -57,6 +57,10 @@ module EtcdDiscovery
       end
     end
 
+    def to_s
+      to_uri.to_s
+    end
+
     def to_json
       attributes.to_json
     end
