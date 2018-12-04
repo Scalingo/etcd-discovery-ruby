@@ -37,11 +37,7 @@ module EtcdDiscovery
       if node.children.length == 0
         raise ServiceNotFound, attributes['name']
       end
-      hosts = []
-      node.children.each do |c|
-        hosts << Host.new(c)
-      end
-      return hosts
+      return node.children.map{|c| Host.new(c)}
     end
 
     def one
