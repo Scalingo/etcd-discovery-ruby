@@ -21,9 +21,9 @@ module EtcdDiscovery
       client = EtcdDiscovery.config.client
       begin
         service = client.get("/services_infos/#{service}")
-        return self.new service.node
+        return new service.node
       rescue Etcd::KeyNotFound
-        return self.new({'name' => service})
+        return new('name' => service)
       end
     end
 
@@ -34,25 +34,23 @@ module EtcdDiscovery
       rescue Etcd::KeyNotFound
         raise ServiceNotFound, attributes['name']
       end
-      if node.children.length == 0
-        raise ServiceNotFound, attributes['name']
-      end
-      return node.children.map{|c| Host.new(c)}
+      raise ServiceNotFound, attributes['name'] if node.children.empty?
+      return node.children.map { |c| Host.new(c) }
     end
 
     def one
       all.sample
     end
 
-    def to_uri(schemes = ["https", "http"])
+    def to_uri(schemes = ['https', 'http'])
       a = attributes
       return one.to_uri(schemes) unless a['public']
 
       schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.select{|s|
-        !a['ports'][s].nil?
-      }.first
-      if a['user'].nil? || a['user'] == ""
+      scheme = schemes.reject do |s|
+        a['ports'][s].nil?
+      end.first
+      if a['user'].nil? || a['user'] == ''
         URI("#{scheme}://#{a['hostname']}:#{a['ports'][scheme]}")
       else
         URI("#{scheme}://#{a['user']}:#{a['password']}@#{a['hostname']}:#{a['ports'][scheme]}")
