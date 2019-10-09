@@ -1,3 +1,7 @@
+## v1.0.6/7 - 9 Oct 2019
+
+* Fix handling of etcd error when watching key
+
 ## v1.0.4/5 - 24 Aug 2018
 
 * Fix bug when service is using old version of protocol without /services_infos
