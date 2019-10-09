@@ -58,6 +58,7 @@ module EtcdDiscovery
               resp = client.watch service_key, { index: index }
             rescue => e
               @logger.warn "Fail to watch #{service_key}: #{e}, #{e.message}, #{e.class}"
+              index = 0
               next
             end
             value = JSON.parse resp.node.value
