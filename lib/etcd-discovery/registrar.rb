@@ -54,7 +54,12 @@ module EtcdDiscovery
           @logger.warn "Watcher #{@service.attributes['name']} started"
           index = 0
           while @state == :started
-            resp = client.watch service_key, {index: index}
+            begin
+              resp = client.watch service_key, { index: index }
+            rescue => e
+              @logger.warn "Fail to watch #{service_key}: #{e}, #{e.message}, #{e.class}"
+              next
+            end
             value = JSON.parse resp.node.value
             @user = value['user']
             @password = value['password']
