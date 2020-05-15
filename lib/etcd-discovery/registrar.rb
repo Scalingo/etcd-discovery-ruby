@@ -50,15 +50,16 @@ module EtcdDiscovery
 
       # Do not start credentials synchro if the service is not public or has no credentials
       if @service.attributes['public'] && (@service.attributes['user'].present? || @service.attributes['password'].present?)
-        @watcher = Thread.new {
+        @watcher = Thread.new do
           @logger.warn "Watcher #{@service.attributes['name']} started"
           index = 0
           while @state == :started
             begin
-              resp = client.watch service_key, { index: index }
-            rescue => e
+              resp = client.watch service_key, index: index
+            rescue StandardError => e
               @logger.warn "Fail to watch #{service_key}: #{e}, #{e.message}, #{e.class}"
               index = 0
+              sleep(config.register_ttl / 2)
               next
             end
             value = JSON.parse resp.node.value
@@ -68,24 +69,23 @@ module EtcdDiscovery
             @service.set_credentials user, password
             index = resp.etcd_index
           end
-        }
+        end
       end
 
       client.set(service_key, value: service_value)
-      @thread = Thread.new {
+      @thread = Thread.new do
         @logger.warn "Register '#{@service}' started"
         while @state == :started
           value = @host.to_json
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
-          rescue => e
+          rescue StndardError => e
             @logger.warn "Fail to set #{service_key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
         end
         @logger.warn "Register '#{@service}' stopped"
-      }
-
+      end
 
       return self
     end
