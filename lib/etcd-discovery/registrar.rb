@@ -79,7 +79,7 @@ module EtcdDiscovery
           value = @host.to_json
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
-          rescue StndardError => e
+          rescue StandardError => e
             @logger.warn "Fail to set #{service_key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
