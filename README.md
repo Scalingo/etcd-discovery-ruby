@@ -1,7 +1,7 @@
 etcd-discovery-ruby
 ==================
 
-Ruby gem implementing go Appsdeck/etcd-discovery
+Ruby gem implementing etcd-discovery
 
 ### Configure etcd client
 
