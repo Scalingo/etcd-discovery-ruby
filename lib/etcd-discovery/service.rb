@@ -21,9 +21,9 @@ module EtcdDiscovery
       client = EtcdDiscovery.config.client
       begin
         service = client.get("/services_infos/#{service}")
-        return new service.node
+        new service.node
       rescue Etcd::KeyNotFound
-        return new("name" => service)
+        new("name" => service)
       end
     end
 
@@ -35,7 +35,7 @@ module EtcdDiscovery
         raise ServiceNotFound, attributes["name"]
       end
       raise ServiceNotFound, attributes["name"] if node.children.empty?
-      return node.children.map { |c| Host.new(c) }
+      node.children.map { |c| Host.new(c) }
     end
 
     def one

@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
     "lib/etcd-discovery/registrar.rb",
     "lib/etcd-discovery/registration.rb",
     "spec/spec_helper.rb",
-    "spec/etcd-discovery/registrar_spec.rb",
+    "spec/etcd-discovery/registrar_spec.rb"
   ]
   s.homepage =
     "http://github.com/Scalingo/etcd-discovery-ruby"

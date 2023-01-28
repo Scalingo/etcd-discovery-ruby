@@ -1,4 +1,4 @@
-require "spec_helper.rb"
+require "spec_helper"
 
 RSpec.describe EtcdDiscovery::Registrar do
   context "without a running client" do
@@ -35,7 +35,10 @@ RSpec.describe EtcdDiscovery::Registrar do
   context "with a registered client" do
     subject { EtcdDiscovery::Registrar.new("service", EtcdDiscovery::Host.new({"name" => "example.com", "ports" => {"http" => 80}})) }
 
-    before(:each) do subject.register; sleep 0.2; end
+    before(:each) do
+      subject.register
+      sleep 0.2
+    end
     after(:each) do subject.stop if subject.state == :started; end
 
     describe "#register" do

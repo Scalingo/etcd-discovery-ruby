@@ -40,7 +40,7 @@ module EtcdDiscovery
     def to_private_uri(schemes = ["https", "http"])
       a = attributes
       if a["private_hostname"].empty?
-        return self.to_uri(schemes)
+        return to_uri(schemes)
       end
       schemes = [schemes] if !schemes.is_a?(Array)
       scheme = schemes.select { |s|
@@ -60,7 +60,7 @@ module EtcdDiscovery
     end
 
     def to_s
-      self.to_uri.to_s
+      to_uri.to_s
     end
   end
 end

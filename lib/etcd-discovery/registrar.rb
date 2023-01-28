@@ -56,7 +56,7 @@ module EtcdDiscovery
           while @state == :started
             begin
               resp = client.watch service_key, index: index
-            rescue StandardError => e
+            rescue => e
               @logger.warn "Fail to watch #{service_key}: #{e}, #{e.message}, #{e.class}"
               index = 0
               sleep(config.register_ttl / 2)
@@ -79,7 +79,7 @@ module EtcdDiscovery
           value = @host.to_json
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
-          rescue StandardError => e
+          rescue => e
             @logger.warn "Fail to set #{service_key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
@@ -87,7 +87,7 @@ module EtcdDiscovery
         @logger.warn "Register '#{@service}' stopped"
       end
 
-      return self
+      self
     end
 
     def stop
@@ -124,7 +124,7 @@ module EtcdDiscovery
       }
       params["hostname"] = host.attributes["name"] if params["public"]
       params["ports"] = host.attributes["ports"] if params["public"]
-      return params
+      params
     end
   end
 end

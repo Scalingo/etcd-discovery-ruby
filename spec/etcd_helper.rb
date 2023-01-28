@@ -3,7 +3,7 @@ module EtcdHelper
     WebMock.stub_request(:get, "http://localhost:2379/v2/keys/services_infos/#{service}")
       .to_return(
         status: 404,
-        body: {"cause" => "", "index" => "", "errorCode" => 100}.to_json,
+        body: {"cause" => "", "index" => "", "errorCode" => 100}.to_json
       )
   end
 
@@ -13,9 +13,9 @@ module EtcdHelper
         status: 200,
         body: {
           "action" => "get", "node" => {
-            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => info.to_json,
-          },
-        }.to_json,
+            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => info.to_json
+          }
+        }.to_json
       )
   end
 
@@ -30,11 +30,11 @@ module EtcdHelper
               value["name"] = "#{service}-#{i}.scalingo.test"
               {
                 createdIndex: 2, modifiedIndex: 2, dir: false,
-                value: value.to_json,
+                value: value.to_json
               }
             end
-          },
-        }.to_json,
+          }
+        }.to_json
       }
     end
   end

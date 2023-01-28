@@ -36,7 +36,7 @@ RSpec.describe EtcdDiscovery::Service do
       "user" => "user",
       "password" => "secret",
       "ports" => {"https" => "5000"},
-      "public" => true,
+      "public" => true
     }
   end
   let(:host) do
@@ -50,7 +50,7 @@ RSpec.describe EtcdDiscovery::Service do
       "private_hostname" => "private01.scalingo.test",
       "private_ports" => {"https" => "5000"},
       "critical" => false,
-      "uuid" => "4186d8d5-36de-4781-73f2-c72a42f3f7b2-private01.scalingo.test",
+      "uuid" => "4186d8d5-36de-4781-73f2-c72a42f3f7b2-private01.scalingo.test"
     }
   end
 
