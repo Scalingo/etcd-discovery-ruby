@@ -34,7 +34,7 @@ module EtcdDiscovery
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
-      @user     = @host.attributes["user"]
+      @user = @host.attributes["user"]
       @password = @host.attributes["password"]
     end
 
@@ -116,14 +116,14 @@ module EtcdDiscovery
 
     def service_params
       params = {
-        "name" =>     host.attributes["service_name"],
+        "name" => host.attributes["service_name"],
         "critical" => host.attributes["critical"],
-        "user" =>     host.attributes["user"],
+        "user" => host.attributes["user"],
         "password" => host.attributes["password"],
-        "public" =>   host.attributes["public"]
+        "public" => host.attributes["public"]
       }
-      params["hostname"] = host.attributes["name"]if params["public"]
-      params["ports"] = host.attributes["ports"]  if params["public"]
+      params["hostname"] = host.attributes["name"] if params["public"]
+      params["ports"] = host.attributes["ports"] if params["public"]
       return params
     end
   end

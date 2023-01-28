@@ -27,7 +27,7 @@ module EtcdDiscovery
     def to_uri(schemes = ["https", "http"])
       a = attributes # Shorten name
       schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.select{|s|
+      scheme = schemes.select { |s|
         !a["ports"][s].nil?
       }.first
       if a["user"].empty?
@@ -43,7 +43,7 @@ module EtcdDiscovery
         return self.to_uri(schemes)
       end
       schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.select{ |s|
+      scheme = schemes.select { |s|
         !a["private_ports"][s].nil?
       }.first
 

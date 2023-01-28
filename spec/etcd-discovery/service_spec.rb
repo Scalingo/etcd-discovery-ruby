@@ -35,7 +35,7 @@ RSpec.describe EtcdDiscovery::Service do
       "hostname" => "public.scalingo.test",
       "user" => "user",
       "password" => "secret",
-      "ports" => { "https" => "5000" },
+      "ports" => {"https" => "5000"},
       "public" => true,
     }
   end
@@ -43,12 +43,12 @@ RSpec.describe EtcdDiscovery::Service do
     {
       "name" => "public.scalingo.test",
       "service_name" => "service01",
-      "ports" => { "https" => "5000" },
+      "ports" => {"https" => "5000"},
       "user" => "user",
       "password" => "secret",
       "public" => true,
       "private_hostname" => "private01.scalingo.test",
-      "private_ports" => { "https" => "5000" },
+      "private_ports" => {"https" => "5000"},
       "critical" => false,
       "uuid" => "4186d8d5-36de-4781-73f2-c72a42f3f7b2-private01.scalingo.test",
     }

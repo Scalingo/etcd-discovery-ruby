@@ -3,7 +3,7 @@ module EtcdHelper
     WebMock.stub_request(:get, "http://localhost:2379/v2/keys/services_infos/#{service}")
       .to_return(
         status: 404,
-        body: { "cause" => "", "index" => "", "errorCode" => 100 }.to_json,
+        body: {"cause" => "", "index" => "", "errorCode" => 100}.to_json,
       )
   end
 
