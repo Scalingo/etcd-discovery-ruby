@@ -1,8 +1,8 @@
 ## Require files from etcd-discovery
 
-require 'etcd'
-require 'json'
-require 'logger'
+require "etcd"
+require "json"
+require "logger"
 
 dir = File.join File.dirname(__FILE__), "etcd-discovery"
 Dir["#{dir}/*.rb"].each do |file|
