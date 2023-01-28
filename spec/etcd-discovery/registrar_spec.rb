@@ -39,7 +39,7 @@ RSpec.describe EtcdDiscovery::Registrar do
       subject.register
       sleep 0.2
     end
-    after(:each) do subject.stop if subject.state == :started; end
+    after(:each) { subject.stop if subject.state == :started; }
 
     describe "#register" do
       its(:thread) { is_expected.not_to eq nil }

@@ -5,7 +5,7 @@ require "json"
 require "logger"
 
 dir = File.join File.dirname(__FILE__), "etcd-discovery"
-Dir["#{dir}/*.rb"].each do |file|
+Dir["#{dir}/*.rb"].sort.each do |file|
   require file
 end
 
@@ -17,7 +17,7 @@ module EtcdDiscovery
   end
 
   def self.configure(&block)
-    yield config if block_given?
+    yield config if block
     config.validate
   end
 

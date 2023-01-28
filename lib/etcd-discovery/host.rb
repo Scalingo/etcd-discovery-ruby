@@ -13,7 +13,7 @@ module EtcdDiscovery
       else
         raise TypeError, "requires a Etcd::Node or a Hash, not a #{arg.class}"
       end
-      if !attributes.has_key?("name") or !attributes.has_key?("ports")
+      if !attributes.has_key?("name") || !attributes.has_key?("ports")
         raise InvalidHost, "attributes 'name' and 'ports' should be defined"
       end
       attributes["user"] = "" if attributes["user"].nil?
@@ -27,9 +27,9 @@ module EtcdDiscovery
     def to_uri(schemes = ["https", "http"])
       a = attributes # Shorten name
       schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.select { |s|
+      scheme = schemes.find { |s|
         !a["ports"][s].nil?
-      }.first
+      }
       if a["user"].empty?
         URI("#{scheme}://#{a["name"]}:#{a["ports"][scheme]}")
       else
@@ -43,9 +43,9 @@ module EtcdDiscovery
         return to_uri(schemes)
       end
       schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.select { |s|
+      scheme = schemes.find { |s|
         !a["private_ports"][s].nil?
-      }.first
+      }
 
       if a["user"].nil? || a["user"] == ""
         URI("#{scheme}://#{a["private_hostname"]}:#{a["private_ports"][scheme]}")
