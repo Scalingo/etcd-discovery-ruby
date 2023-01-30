@@ -17,11 +17,11 @@ module EtcdDiscovery
 
     def validate
       if use_ssl
-        if cacert.nil? or !File.exists? cacert
+        if cacert.nil? || !File.exist?(cacert)
           raise InvalidSSLConfig, "cacert"
-        elsif ssl_key.nil? or !File.exists? ssl_key
+        elsif ssl_key.nil? || !File.exist?(ssl_key)
           raise InvalidSSLConfig, "ssl_key"
-        elsif ssl_cert.nil? or !File.exists? ssl_cert
+        elsif ssl_cert.nil? || !File.exist?(ssl_cert)
           raise InvalidSSLConfig, "ssl_cert"
         end
       end

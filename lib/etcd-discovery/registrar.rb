@@ -1,4 +1,4 @@
-require 'securerandom'
+require "securerandom"
 
 module EtcdDiscovery
   class InvalidStateError < StandardError
@@ -25,7 +25,7 @@ module EtcdDiscovery
       @logger = Logger.new($stdout)
 
       if host.is_a? Hash
-        @host = Host.new host.merge('service_name' => service, 'uuid' => SecureRandom.uuid)
+        @host = Host.new host.merge("service_name" => service, "uuid" => SecureRandom.uuid)
       elsif host.is_a? EtcdDiscovery::Host
         @host = host
       else
@@ -34,8 +34,8 @@ module EtcdDiscovery
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
-      @user     = @host.attributes['user']
-      @password = @host.attributes['password']
+      @user = @host.attributes["user"]
+      @password = @host.attributes["password"]
     end
 
     def register
@@ -49,22 +49,22 @@ module EtcdDiscovery
       service_value = @service.to_json
 
       # Do not start credentials synchro if the service is not public or has no credentials
-      if @service.attributes['public'] && (@service.attributes['user'].present? || @service.attributes['password'].present?)
+      if @service.attributes["public"] && (@service.attributes["user"].present? || @service.attributes["password"].present?)
         @watcher = Thread.new do
-          @logger.warn "Watcher #{@service.attributes['name']} started"
+          @logger.warn "Watcher #{@service.attributes["name"]} started"
           index = 0
           while @state == :started
             begin
               resp = client.watch service_key, index: index
-            rescue StandardError => e
+            rescue => e
               @logger.warn "Fail to watch #{service_key}: #{e}, #{e.message}, #{e.class}"
               index = 0
               sleep(config.register_ttl / 2)
               next
             end
             value = JSON.parse resp.node.value
-            @user = value['user']
-            @password = value['password']
+            @user = value["user"]
+            @password = value["password"]
             @host.set_credentials user, password
             @service.set_credentials user, password
             index = resp.etcd_index
@@ -79,7 +79,7 @@ module EtcdDiscovery
           value = @host.to_json
           begin
             client.set(host_key, value: value, ttl: config.register_ttl)
-          rescue StandardError => e
+          rescue => e
             @logger.warn "Fail to set #{service_key}: #{e}, #{e.message}, #{e.class}"
           end
           sleep config.register_renew
@@ -87,7 +87,7 @@ module EtcdDiscovery
         @logger.warn "Register '#{@service}' stopped"
       end
 
-      return self
+      self
     end
 
     def stop
@@ -107,24 +107,24 @@ module EtcdDiscovery
     end
 
     def host_key
-      "/services/#{@service.attributes['name']}/#{@host.attributes['uuid']}"
+      "/services/#{@service.attributes["name"]}/#{@host.attributes["uuid"]}"
     end
 
     def service_key
-      "/services_infos/#{@service.attributes['name']}"
+      "/services_infos/#{@service.attributes["name"]}"
     end
 
     def service_params
       params = {
-        'name' =>     host.attributes['service_name'],
-        'critical' => host.attributes['critical'],
-        'user' =>     host.attributes['user'],
-        'password' => host.attributes['password'],
-        'public' =>   host.attributes['public']
+        "name" => host.attributes["service_name"],
+        "critical" => host.attributes["critical"],
+        "user" => host.attributes["user"],
+        "password" => host.attributes["password"],
+        "public" => host.attributes["public"]
       }
-      params['hostname'] = host.attributes['name']if params['public']
-      params['ports'] = host.attributes['ports']  if params['public']
-      return params
+      params["hostname"] = host.attributes["name"] if params["public"]
+      params["ports"] = host.attributes["ports"] if params["public"]
+      params
     end
   end
 end
