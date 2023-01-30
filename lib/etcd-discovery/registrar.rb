@@ -94,8 +94,8 @@ module EtcdDiscovery
       raise InvalidStateError.new(@state, :started) if @state != :started
       @logger.debug "Set state to :stopped"
       @state = :stopped
-      @logger.debug "Delete #{key}"
-      client.delete(key)
+      @logger.debug "Delete #{host_key}"
+      client.delete(host_key)
     end
 
     def client
