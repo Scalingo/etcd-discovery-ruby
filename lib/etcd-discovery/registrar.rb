@@ -25,8 +25,11 @@ module EtcdDiscovery
       @logger = Logger.new($stdout)
 
       if host.is_a? Hash
-        @host = Host.new host.merge("service_name" => service, "uuid" => SecureRandom.uuid)
+        host_uuid = "#{SecureRandom.uuid}-#{host["private_hostname"]}"
+        @host = Host.new host.merge("uuid" => host_uuid)
       elsif host.is_a? EtcdDiscovery::Host
+        host_uuid = "#{SecureRandom.uuid}-#{host.attributes["private_hostname"]}"
+        host.attributes["uuid"] = host_uuid
         @host = host
       else
         raise TypeError, "host should be a Hash or a Etcd::Host, is a #{host.class}"
