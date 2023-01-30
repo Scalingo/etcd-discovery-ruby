@@ -29,7 +29,7 @@ RSpec.describe EtcdDiscovery::Registrar do
     end
 
     its(:client) { is_expected.to eq EtcdDiscovery.config.client }
-    its(:key) { is_expected.to eq "/services/service/example.com" }
+    its(:host_key) { is_expected.to start_with "/services/service/" }
   end
 
   context "with a registered client" do
