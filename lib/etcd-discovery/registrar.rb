@@ -34,6 +34,8 @@ module EtcdDiscovery
       else
         raise TypeError, "host should be a Hash or a Etcd::Host, is a #{host.class}"
       end
+      # This attribute is later used when instantiating EtcdDiscovery::Service. We want this value to be the content of `service`, always.
+      @host.attributes["service_name"] = service
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
