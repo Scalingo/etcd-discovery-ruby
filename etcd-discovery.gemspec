@@ -19,5 +19,8 @@ Gem::Specification.new do |s|
   s.homepage =
     "http://github.com/Scalingo/etcd-discovery-ruby"
   s.license = "BSD"
+
+  s.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+
   s.add_dependency "etcd"
 end
