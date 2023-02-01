@@ -7,8 +7,10 @@ module EtcdHelper
       )
   end
 
-  def mock_service_info(service, info)
-    WebMock.stub_request(:get, "http://localhost:2379/v2/keys/services_infos/#{service}")
+  def mock_service_info(service, info, recursive = false)
+    uri = "http://localhost:2379/v2/keys/services_infos/#{service}"
+    uri = "#{uri}?recursive=true" if recursive
+    WebMock.stub_request(:get, uri)
       .to_return(
         status: 200,
         body: {

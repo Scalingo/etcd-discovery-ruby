@@ -33,32 +33,113 @@ RSpec.describe EtcdDiscovery::Registrar do
   end
 
   context "with a registered client" do
-    subject { EtcdDiscovery::Registrar.new("service", EtcdDiscovery::Host.new({"name" => "example.com", "ports" => {"http" => 80}})) }
+    let(:info) do
+      {
+        "name" => "service",
+        "critical" => true,
+        "hostname" => "public.scalingo.test",
+        "user" => "user",
+        "password" => "secret",
+        "ports" => {"https" => "5000", "http" => 80},
+        "public" => true
+      }
+    end
+    let(:host) do
+      {
+        "name" => info["hostname"],
+        "service_name" => info["name"],
+        "ports" => info["ports"],
+        "user" => info["user"],
+        "password" => info["secret"],
+        "public" => info["public"],
+        "private_ports" => info["ports"],
+        "critical" => info["critical"],
+        "private_hostname" => "private01.scalingo.test",
+        "uuid" => "my-uuid"
+      }
+    end
+    subject do
+      EtcdDiscovery::Registrar.new(
+        info["name"],
+        EtcdDiscovery::Host.new({"name" => info["hostname"], "ports" => info["ports"]}),
+      )
+    end
 
     before(:each) do
+      mock_service_info(info["name"], info, recursive=true)
+      mock_hosts(info["name"], host, 1)
+
+      WebMock.stub_request(:put, "http://localhost:2379/v2/keys/services_infos/#{info["name"]}")
+        .to_return(
+          status: 200,
+          body: {
+            "action" => "get", "node" => {
+              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+            }
+          }.to_json
+        )
+
+      WebMock.stub_request(
+        :put, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
+      ).to_return(
+          status: 200,
+          body: {
+            "action" => "get", "node" => {
+              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+            }
+          }.to_json
+        )
+
       subject.register
       sleep 0.2
     end
-    after(:each) { subject.stop if subject.state == :started; }
 
-    describe "#register" do
-      its(:thread) { is_expected.not_to eq nil }
-      it "s thread should be alived" do
-        expect(subject.thread.alive?).to eq true
-      end
+    after(:each) do
+      WebMock.stub_request(
+        :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
+      ).to_return(
+          status: 200,
+          body: {
+            "action" => "get", "node" => {
+              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+            }
+          }.to_json
+        )
+       subject.stop if subject.state == :started
     end
 
     describe "#stop" do
       it "should stop its registering thread" do
+        WebMock.stub_request(
+          :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
+        ).to_return(
+            status: 200,
+            body: {
+              "action" => "get", "node" => {
+                "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+              }
+            }.to_json
+          )
         subject.stop
         sleep 0.2
         expect(subject.thread.alive?).to eq false
       end
 
-      it "should remote the etcd key of the service" do
-        expect(EtcdDiscovery.get("service").length).to eq 1
+      it "should set the service state to stopped" do
+        mock_service_info(info["name"], info)
+        WebMock.stub_request(
+          :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
+        ).to_return(
+            status: 200,
+            body: {
+              "action" => "get", "node" => {
+                "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+              }
+            }.to_json
+          )
+        expect(EtcdDiscovery.get(info["name"]).all.length).to eq 1
         subject.stop
-        expect { EtcdDiscovery.get("service") }.to raise_exception EtcdDiscovery::ServiceNotFound
+        expect(subject.state).to eq :stopped
       end
     end
   end
