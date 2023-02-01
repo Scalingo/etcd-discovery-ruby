@@ -25,15 +25,20 @@ module EtcdDiscovery
       @logger = Logger.new($stdout)
 
       if host.is_a? Hash
-        host_uuid = "#{SecureRandom.uuid}-#{host["private_hostname"]}"
-        @host = Host.new host.merge("uuid" => host_uuid)
+        if host.has_key?("uuid")
+          host_uuid = "#{SecureRandom.uuid}-#{host["private_hostname"]}"
+          host = host.merge("uuid" => host_uuid)
+        end
+        @host = Host.new host
       elsif host.is_a? EtcdDiscovery::Host
-        host_uuid = "#{SecureRandom.uuid}-#{host.attributes["private_hostname"]}"
-        host.attributes["uuid"] = host_uuid
+        if host.attributes.has_key?("uuid")
+          host.attributes["uuid"] = "#{SecureRandom.uuid}-#{host.attributes["private_hostname"]}"
+        end
         @host = host
       else
         raise TypeError, "host should be a Hash or a Etcd::Host, is a #{host.class}"
       end
+
       # This attribute is later used when instantiating EtcdDiscovery::Service. We want this value to be the content of `service`, always.
       @host.attributes["service_name"] = service
 
