@@ -42,15 +42,27 @@ module EtcdHelper
   end
 
   def mock_delete_host_key(service, host_uuid)
-      WebMock.stub_request(
-        :delete, "http://localhost:2379/v2/keys/services/#{service}/#{host_uuid}"
-      ).to_return(
-          status: 200,
-          body: {
-            "action" => "get", "node" => {
-              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-            }
-          }.to_json
-        )
+    WebMock.stub_request(
+      :delete, "http://localhost:2379/v2/keys/services/#{service}/#{host_uuid}"
+    ).to_return(
+        status: 200,
+        body: {
+          "action" => "get", "node" => {
+            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+          }
+        }.to_json
+      )
+  end
+
+  def mock_set_service_key(service)
+    WebMock.stub_request(:put, "http://localhost:2379/v2/keys/services_infos/#{service}")
+      .to_return(
+        status: 200,
+        body: {
+          "action" => "get", "node" => {
+            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+          }
+        }.to_json
+      )
   end
 end
