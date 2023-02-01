@@ -72,7 +72,6 @@ RSpec.describe EtcdDiscovery::Registrar do
       mock_set_host_key(info["name"], subject.host.attributes["uuid"])
 
       subject.register
-      sleep 0.2
     end
 
     after(:each) do
@@ -85,7 +84,8 @@ RSpec.describe EtcdDiscovery::Registrar do
         mock_delete_host_key(info["name"], subject.host.attributes["uuid"])
 
         subject.stop
-        sleep 0.2
+        # Wait for the register thread to detect the change of @state and stop.
+        sleep 0.3
         expect(subject.thread.alive?).to eq false
       end
 
