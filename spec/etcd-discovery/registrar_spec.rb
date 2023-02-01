@@ -95,31 +95,14 @@ RSpec.describe EtcdDiscovery::Registrar do
     end
 
     after(:each) do
-      WebMock.stub_request(
-        :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
-      ).to_return(
-          status: 200,
-          body: {
-            "action" => "get", "node" => {
-              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-            }
-          }.to_json
-        )
-       subject.stop if subject.state == :started
+      mock_delete_host_key(info["name"], subject.host.attributes["uuid"])
+      subject.stop if subject.state == :started
     end
 
     describe "#stop" do
       it "should stop its registering thread" do
-        WebMock.stub_request(
-          :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
-        ).to_return(
-            status: 200,
-            body: {
-              "action" => "get", "node" => {
-                "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-              }
-            }.to_json
-          )
+        mock_delete_host_key(info["name"], subject.host.attributes["uuid"])
+
         subject.stop
         sleep 0.2
         expect(subject.thread.alive?).to eq false
@@ -127,18 +110,11 @@ RSpec.describe EtcdDiscovery::Registrar do
 
       it "should set the service state to stopped" do
         mock_service_info(info["name"], info)
-        WebMock.stub_request(
-          :delete, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
-        ).to_return(
-            status: 200,
-            body: {
-              "action" => "get", "node" => {
-                "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-              }
-            }.to_json
-          )
+        mock_delete_host_key(info["name"], subject.host.attributes["uuid"])
         expect(EtcdDiscovery.get(info["name"]).all.length).to eq 1
+
         subject.stop
+
         expect(subject.state).to eq :stopped
       end
     end
