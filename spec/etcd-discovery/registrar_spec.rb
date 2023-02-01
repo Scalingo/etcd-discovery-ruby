@@ -69,17 +69,7 @@ RSpec.describe EtcdDiscovery::Registrar do
       mock_service_info(info["name"], info, recursive=true)
       mock_hosts(info["name"], host, 1)
       mock_set_service_key(info["name"])
-
-      WebMock.stub_request(
-        :put, "http://localhost:2379/v2/keys/services/#{info["name"]}/#{subject.host.attributes["uuid"]}"
-      ).to_return(
-          status: 200,
-          body: {
-            "action" => "get", "node" => {
-              "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-            }
-          }.to_json
-        )
+      mock_set_host_key(info["name"], subject.host.attributes["uuid"])
 
       subject.register
       sleep 0.2
