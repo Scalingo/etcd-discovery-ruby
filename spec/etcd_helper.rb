@@ -45,13 +45,13 @@ module EtcdHelper
     WebMock.stub_request(
       :delete, "http://localhost:2379/v2/keys/services/#{service}/#{host_uuid}"
     ).to_return(
-        status: 200,
-        body: {
-          "action" => "get", "node" => {
-            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-          }
-        }.to_json
-      )
+      status: 200,
+      body: {
+        "action" => "get", "node" => {
+          "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+        }
+      }.to_json
+    )
   end
 
   def mock_set_service_key(service)
@@ -70,12 +70,12 @@ module EtcdHelper
     WebMock.stub_request(
       :put, "http://localhost:2379/v2/keys/services/#{service}/#{host_uuid}"
     ).to_return(
-        status: 200,
-        body: {
-          "action" => "get", "node" => {
-            "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
-          }
-        }.to_json
-      )
+      status: 200,
+      body: {
+        "action" => "get", "node" => {
+          "createIndex" => 1, "modifiedIndex" => 1, "dir" => false, "value" => {}.to_json
+        }
+      }.to_json
+    )
   end
 end

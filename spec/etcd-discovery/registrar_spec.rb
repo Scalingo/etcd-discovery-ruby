@@ -61,12 +61,12 @@ RSpec.describe EtcdDiscovery::Registrar do
     subject do
       EtcdDiscovery::Registrar.new(
         info["name"],
-        EtcdDiscovery::Host.new({"name" => info["hostname"], "ports" => info["ports"]}),
+        EtcdDiscovery::Host.new({"name" => info["hostname"], "ports" => info["ports"]})
       )
     end
 
     before(:each) do
-      mock_service_info(info["name"], info, recursive=true)
+      mock_service_info(info["name"], info, recursive = true)
       mock_hosts(info["name"], host, 1)
       mock_set_service_key(info["name"])
       mock_set_host_key(info["name"], subject.host.attributes["uuid"])
