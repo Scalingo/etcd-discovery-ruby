@@ -25,12 +25,22 @@ module EtcdDiscovery
       @logger = Logger.new($stdout)
 
       if host.is_a? Hash
-        @host = Host.new host.merge("service_name" => service, "uuid" => SecureRandom.uuid)
+        if host.has_key?("uuid")
+          host_uuid = "#{SecureRandom.uuid}-#{host["private_hostname"]}"
+          host = host.merge("uuid" => host_uuid)
+        end
+        @host = Host.new host
       elsif host.is_a? EtcdDiscovery::Host
+        if host.attributes.has_key?("uuid")
+          host.attributes["uuid"] = "#{SecureRandom.uuid}-#{host.attributes["private_hostname"]}"
+        end
         @host = host
       else
         raise TypeError, "host should be a Hash or a Etcd::Host, is a #{host.class}"
       end
+
+      # This attribute is later used when instantiating EtcdDiscovery::Service. We want this value to be the content of `service`, always.
+      @host.attributes["service_name"] = service
 
       @service = EtcdDiscovery::Service.new service_params
       @state = :new
@@ -94,8 +104,8 @@ module EtcdDiscovery
       raise InvalidStateError.new(@state, :started) if @state != :started
       @logger.debug "Set state to :stopped"
       @state = :stopped
-      @logger.debug "Delete #{key}"
-      client.delete(key)
+      @logger.debug "Delete #{host_key}"
+      client.delete(host_key)
     end
 
     def client
@@ -116,14 +126,14 @@ module EtcdDiscovery
 
     def service_params
       params = {
-        "name" => host.attributes["service_name"],
-        "critical" => host.attributes["critical"],
-        "user" => host.attributes["user"],
-        "password" => host.attributes["password"],
-        "public" => host.attributes["public"]
+        "name" => @host.attributes["service_name"],
+        "critical" => @host.attributes["critical"],
+        "user" => @host.attributes["user"],
+        "password" => @host.attributes["password"],
+        "public" => @host.attributes["public"]
       }
-      params["hostname"] = host.attributes["name"] if params["public"]
-      params["ports"] = host.attributes["ports"] if params["public"]
+      params["hostname"] = @host.attributes["name"] if params["public"]
+      params["ports"] = @host.attributes["ports"] if params["public"]
       params
     end
   end
