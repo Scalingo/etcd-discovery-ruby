@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "etcd-discovery"
-  s.version = "1.0.7"
+  s.version = "1.1.0"
   s.summary = "Service discovery based on etcd"
   s.description = "Ruby implementation of a service discovery tool based on etcd"
   s.authors = ["Léo Unbekandt"]
@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
     "http://github.com/Scalingo/etcd-discovery-ruby"
   s.license = "BSD"
 
-  s.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
+  s.required_ruby_version = Gem::Requirement.new(">= 2.7.0")
 
   s.add_dependency "etcd"
 end
