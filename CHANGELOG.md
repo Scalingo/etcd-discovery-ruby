@@ -1,3 +1,12 @@
+## v1.1.0 - 24 Aug 2023
+
+* Setup Dependabot
+* Setup Robocop and linting configuration
+* Setup Scalingo internal metadata (Asgard)
+* Update Ruby to 3.1, fix deprecation (exists? → exist?)
+* Setup Github Actions for Dependabot PR management (automerge)
+* Some additional Specs
+
 ## v1.0.6/7 - 9 Oct 2019
 
 * Fix handling of etcd error when watching key
