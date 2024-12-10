@@ -25,16 +25,17 @@ module EtcdDiscovery
     end
 
     def to_uri(schemes = ["https", "http"])
-      a = attributes # Shorten name
-      schemes = [schemes] if !schemes.is_a?(Array)
-      scheme = schemes.find { |s|
-        !a["ports"][s].nil?
-      }
-      if a["user"].empty?
-        URI("#{scheme}://#{a["name"]}:#{a["ports"][scheme]}")
-      else
-        URI("#{scheme}://#{a["user"]}:#{a["password"]}@#{a["name"]}:#{a["ports"][scheme]}")
+      schemes = Array(schemes)
+      a = attributes
+
+      scheme = schemes.find { |s| a["ports"][s] }
+      raise "No valid scheme found" unless scheme
+
+      if a["user"].nil? || a["user"].empty?
+        return URI("#{scheme}://#{a["name"]}:#{a["ports"][scheme]}")
       end
+
+      URI("#{scheme}://#{a["user"]}:#{a["password"]}@#{a["name"]}:#{a["ports"][scheme]}")
     end
 
     def to_private_uri(schemes = ["https", "http"])
@@ -60,7 +61,12 @@ module EtcdDiscovery
     end
 
     def to_s
-      to_uri.to_s
+      uri = to_uri
+      if uri.userinfo
+        user, _password = uri.userinfo.split(":", 2)
+        uri.userinfo = "#{user}:REDACTED"
+      end
+      uri.to_s
     end
   end
 end

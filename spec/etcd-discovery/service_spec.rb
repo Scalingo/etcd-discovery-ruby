@@ -113,10 +113,23 @@ RSpec.describe EtcdDiscovery::Service do
       expect(service.to_uri.to_s).to eq "https://user:secret@service01-0.scalingo.test:5000"
     end
 
+    it "should get the URI of one of the hosts with redacted password" do
+      mock_not_found("service01")
+      mock_hosts("service01", host, 1)
+      service = subject.get("service01")
+      expect(service.to_s).to eq "https://user:REDACTED@service01-0.scalingo.test:5000"
+    end
+
     it "should get the URI of the service if public" do
       mock_service_info("service01", info)
       service = subject.get("service01")
       expect(service.to_uri.to_s).to eq "https://user:secret@public.scalingo.test:5000"
+    end
+
+    it "should get the URI of the service with redacted password" do
+      mock_service_info("service01", info)
+      service = subject.get("service01")
+      expect(service.to_s).to eq "https://user:REDACTED@public.scalingo.test:5000"
     end
   end
 
@@ -127,6 +140,13 @@ RSpec.describe EtcdDiscovery::Service do
       mock_hosts("service01", host, 1)
       service = subject.get("service01")
       expect(service.one.to_uri.to_s).to eq "https://user:secret@service01-0.scalingo.test:5000"
+    end
+
+    it "should get the URI of the private host with redacted password" do
+      mock_service_info("service01", info)
+      mock_hosts("service01", host, 1)
+      service = subject.get("service01")
+      expect(service.one.to_s).to eq "https://user:REDACTED@service01-0.scalingo.test:5000"
     end
   end
 end
