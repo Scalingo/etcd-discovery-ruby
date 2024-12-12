@@ -45,17 +45,16 @@ module EtcdDiscovery
     def to_uri(schemes = ["https", "http"])
       schemes = Array(schemes)
 
-      a = attributes
-      return one.to_uri(schemes) unless a["public"]
+      return one.to_uri(schemes) unless attributes["public"]
 
-      scheme = schemes.find { |s| a["ports"][s] }
+      scheme = schemes.find { |s| attributes["ports"][s] }
       raise "No valid scheme found" unless scheme
 
-      if a["user"].nil? || a["user"].empty?
-        return URI("#{scheme}://#{a["hostname"]}:#{a["ports"][scheme]}")
+      if attributes["user"].nil? || attributes["user"].empty?
+        return URI("#{scheme}://#{attributes["hostname"]}:#{attributes["ports"][scheme]}")
       end
 
-      URI("#{scheme}://#{a["user"]}:#{a["password"]}@#{a["hostname"]}:#{a["ports"][scheme]}")
+      URI("#{scheme}://#{attributes["user"]}:#{attributes["password"]}@#{attributes["hostname"]}:#{attributes["ports"][scheme]}")
     end
 
     def to_s
