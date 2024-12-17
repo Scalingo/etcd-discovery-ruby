@@ -75,3 +75,30 @@ registration = EtcdDiscovery.register service, host
 registration.user     # The current user (it can change at any time)
 registration.password # The current password (it can change at any time)
 ```
+
+### Release a New Version
+Bump new version number in:
+- `CHANGELOG.md`
+- `README.md`
+- `etcd-discovery.gemspec`
+Commit, tag and create a new release:
+
+```bash
+version="1.1.1"
+
+git switch --create release/${version}
+git add CHANGELOG.md README.md etcd-discovery.gemspec
+git commit -m "Bump v${version}"
+git push --set-upstream origin release/${version}
+gh pr create --reviewer=leo-scalingo --title "$(git log -1 --pretty=%B)"
+```
+
+Once the pull request merged, you can tag the new release.
+
+```bash
+git tag v${version}
+git push origin master v${version}
+gh release create v${version}
+```
+
+The title of the release should be the version number and the text of the release is the same as the changelog.

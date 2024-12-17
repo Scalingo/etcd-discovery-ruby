@@ -1,3 +1,7 @@
+## v1.1.1 - 17 Dec 2024
+
+* Fix Redacted credentials when printing services and hosts
+
 ## v1.1.0 - 24 Aug 2023
 
 * Setup Dependabot
