@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [ main, master, prod ]
+
+# Concurrency settings to avoid running multiple workflows for the same pull request or branch at the same time.
+# `concurrency.group` generates a concurrency group name from the workflow name and pull request information. The `||` operator is used to define fallback values.
+# `concurrency.cancel-in-progress` cancels any currently running job or workflow in the same concurrency group.
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Ruby Checks
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: Scalingo/actions/ruby-checks@main
+  rspec:
+    name: RSpec Tests
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: Scalingo/actions/ruby-specs@main
