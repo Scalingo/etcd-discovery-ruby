@@ -9,7 +9,7 @@ EtcdDiscovery.config.register_renew = 0.1
 require "webmock/rspec"
 WebMock.disable_net_connect!(allow_localhost: false)
 
-require_relative "./etcd_helper"
+require_relative "etcd_helper"
 
 RSpec.configure do |config|
   config.include(EtcdHelper)

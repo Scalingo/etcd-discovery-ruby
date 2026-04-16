@@ -28,7 +28,7 @@ module EtcdHelper
           action: "get",
           node: {
             createdIndex: 1, modifiedIndex: 1, dir: true, key: "/services/#{service}",
-            nodes: count.times.map do |i|
+            nodes: Array.new(count) do |i|
               value["name"] = "#{service}-#{i}.scalingo.test"
               {
                 createdIndex: 2, modifiedIndex: 2, dir: false,

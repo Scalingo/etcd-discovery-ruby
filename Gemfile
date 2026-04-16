@@ -5,6 +5,7 @@ gem "rake"
 gem "bigdecimal"
 gem "base64"
 gem "racc"
+gem "rexml"
 
 group :development, :test do
   gem "pry-byebug", "~> 3.10"

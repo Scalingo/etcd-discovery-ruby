@@ -40,6 +40,7 @@ GEM
     regexp_parser (2.11.3)
     reline (0.6.3)
       io-console (~> 0.5)
+    rexml (3.4.4)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -106,6 +107,7 @@ DEPENDENCIES
   pry-byebug (~> 3.10)
   racc
   rake
+  rexml
   rspec
   rspec-its
   rubocop-performance (~> 1.21)
