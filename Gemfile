@@ -3,7 +3,7 @@ source "https://rubygems.org"
 gem "etcd"
 
 group :development, :test do
-  gem "pry-byebug"
+  gem "pry-byebug", "~> 3.10"
 end
 
 group :test do
