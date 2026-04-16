@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gem "etcd"
 gem "rake"
 gem "bigdecimal"
+gem "base64"
 
 group :development, :test do
   gem "pry-byebug", "~> 3.10"

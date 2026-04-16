@@ -4,6 +4,7 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     ast (2.4.2)
+    base64 (0.3.0)
     bigdecimal (4.0.1)
     byebug (13.0.0)
       reline (>= 0.6.0)
@@ -83,6 +84,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  base64
   bigdecimal
   etcd
   pry-byebug (~> 3.10)
