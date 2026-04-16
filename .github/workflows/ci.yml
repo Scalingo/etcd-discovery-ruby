@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [ main, master, prod ]
+
+# Concurrency settings to avoid running multiple workflows for the same pull request or branch at the same time.
+# `concurrency.group` generates a concurrency group name from the workflow name and pull request information. The `||` operator is used to define fallback values.
+# `concurrency.cancel-in-progress` cancels any currently running job or workflow in the same concurrency group.
+concurrency:
+  group: '${{ github.workflow }} @ ${{ github.head_ref || github.ref }}'
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Ruby Checks
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7.8", "3.1.3", "3.4.8"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync Ruby version files
+        shell: bash
+        run: |
+          echo "${{ matrix.ruby }}" > .ruby-version
+          sed -i "s|^FROM ruby:.*|FROM ruby:${{ matrix.ruby }}|" Dockerfile
+          sed -i "s|image: ruby:.*|image: ruby:${{ matrix.ruby }}|" docker-compose.yml
+      - uses: Scalingo/actions/ruby-checks@main
+  rspec:
+    name: RSpec Tests
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ruby: ["2.7.8", "3.1.3", "3.4.8"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set Ruby version
+        shell: bash
+        run: echo "${{ matrix.ruby }}" > .ruby-version
+      - uses: Scalingo/actions/ruby-specs@main

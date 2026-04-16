@@ -7,6 +7,7 @@ group :development, :test do
 end
 
 group :test do
+  gem "rexml"
   gem "webmock"
   gem "rspec"
   gem "rspec-its"
