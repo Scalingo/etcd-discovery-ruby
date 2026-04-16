@@ -14,6 +14,6 @@ group :test do
   gem "webmock"
   gem "rspec"
   gem "rspec-its"
-  gem "standard"
-  gem "rubocop-performance"
+  gem "standard", "~> 1.36"
+  gem "rubocop-performance", "~> 1.21"
 end
