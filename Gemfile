@@ -4,6 +4,7 @@ gem "etcd"
 gem "rake"
 gem "bigdecimal"
 gem "base64"
+gem "racc"
 
 group :development, :test do
   gem "pry-byebug", "~> 3.10"

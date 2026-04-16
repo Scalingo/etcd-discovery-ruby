@@ -31,6 +31,7 @@ GEM
       byebug (~> 13.0)
       pry (>= 0.13, < 0.17)
     public_suffix (5.1.1)
+    racc (1.8.1)
     rainbow (3.1.1)
     rake (13.3.1)
     regexp_parser (2.6.2)
@@ -88,6 +89,7 @@ DEPENDENCIES
   bigdecimal
   etcd
   pry-byebug (~> 3.10)
+  racc
   rake
   rspec
   rspec-its
