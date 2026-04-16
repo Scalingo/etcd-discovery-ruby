@@ -1,20 +1,16 @@
 source "https://rubygems.org"
 
 gem "etcd"
-gem "rake"
-gem "bigdecimal"
-gem "base64"
-gem "racc"
-gem "rexml"
 
 group :development, :test do
-  gem "pry-byebug", "~> 3.10"
+  gem "pry-byebug"
 end
 
 group :test do
+  gem "rexml"
   gem "webmock"
   gem "rspec"
   gem "rspec-its"
-  gem "standard", "~> 1.36"
-  gem "rubocop-performance", "~> 1.21"
+  gem "standard"
+  gem "rubocop-performance"
 end
