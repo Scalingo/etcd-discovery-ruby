@@ -1,8 +1,8 @@
 ## Require files from etcd-discovery
 
+require "logger"
 require "etcd"
 require "json"
-require "logger"
 
 dir = File.join File.dirname(__FILE__), "etcd-discovery"
 Dir["#{dir}/*.rb"].sort.each do |file|
@@ -22,8 +22,8 @@ module EtcdDiscovery
   end
 
   # For a cleaner API
-  def self.get(service)
-    Service.get(service)
+  def self.get(service, shard: nil)
+    Service.get(service, shard: shard)
   end
 
   def self.register(service, host)

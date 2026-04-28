@@ -1,3 +1,7 @@
+## To be released
+
+* Add optional shard support to host registration and service lookups
+
 ## v1.1.1 - 17 Dec 2024
 
 * Fix Redacted credentials when printing services and hosts

@@ -2,7 +2,7 @@ require "etcd-discovery"
 
 require "rubygems"
 require "bundler/setup"
-Bundler.require(:default, :development, :test)
+Bundler.require(:default, :test)
 
 EtcdDiscovery.config.register_renew = 0.1
 

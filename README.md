@@ -29,10 +29,25 @@ hosts.each do |h|
 end
 ```
 
+### Get hosts for a particular shard
+
+```ruby
+hosts = EtcdDiscovery.get("service", shard: "shard-0").all
+hosts.each do |h|
+  puts h.to_uri
+end
+```
+
 ### Get the service public uri
 
 ```ruby
 EtcdDiscovery.get('service').to_uri
+```
+
+### Get the URI of one shard
+
+```ruby
+EtcdDiscovery.get("service", shard: "shard-0").to_uri
 ```
 
 ### Get the private_uri to one of the nodes
@@ -55,6 +70,7 @@ EtcdDiscovery.register "service", {
   'password' => "secret",                       # Optional: If your service use basic auth: the password to access your service
   'public' => true,                             # Optional: Is your service accessible via an external network (or via a load balancer). Setting this to true will enable credentials synchronization.
   'critical' => true,                           # Optional: Is your service critical? This is just a tag and have no impact on the registration process
+  'shard' => 'shard-0',                         # Optional: The shard this host belongs to
   'private_hostname' => 'my-host.internal.com', # Optional: The hostname of the service in the private network
   'private_ports' => {                          # Optional: The ports of the service in the private network
     'http' => '8080',
