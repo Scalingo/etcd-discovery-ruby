@@ -1,5 +1,5 @@
 module EtcdHelper
-  def mock_not_found(service)
+  def mock_service_not_found(service)
     WebMock.stub_request(:get, "http://localhost:2379/v2/keys/services_infos/#{service}")
       .to_return(
         status: 404,
