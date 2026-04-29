@@ -10,6 +10,19 @@ RSpec.describe EtcdDiscovery::Registrar do
         end
       end
 
+      context "with a sharded Hash" do
+        subject do
+          EtcdDiscovery::Registrar.new(
+            "service",
+            {"name" => "example.com", "ports" => {"http" => 80}, "shard" => "shard-0"}
+          )
+        end
+
+        it "should keep the shard on the host payload" do
+          expect(subject.host.attributes["shard"]).to eq "shard-0"
+        end
+      end
+
       context "with a EtcdDiscovery::Host" do
         subject { EtcdDiscovery::Registrar.new "service", EtcdDiscovery::Host.new({"name" => "example.com", "ports" => {"http" => 80}}) }
         it "should defines the state to new" do
