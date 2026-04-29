@@ -70,7 +70,7 @@ RSpec.describe EtcdDiscovery::Service do
 
   describe "::get" do
     it "should return a service from the right type" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       service = subject.get("service01")
       expect(service.attributes["name"]).to eq "service01"
       expect(service.attributes["public"]).to eq nil
@@ -84,7 +84,7 @@ RSpec.describe EtcdDiscovery::Service do
     end
 
     it "should keep the requested shard on the returned service" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       service = subject.get("service01", shard: "shard-0")
       expect(service.shard).to eq "shard-0"
     end
@@ -92,7 +92,7 @@ RSpec.describe EtcdDiscovery::Service do
 
   describe "#all" do
     it "should return all the registered nodes for the given service" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", host, 2)
       service = subject.get("service01")
       hosts = service.all
@@ -102,7 +102,7 @@ RSpec.describe EtcdDiscovery::Service do
     end
 
     it "should filter the registered nodes by shard" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", [
         host.merge("name" => "service01-shard-0.scalingo.test", "shard" => "shard-0", "uuid" => "uuid-shard-0"),
         host.merge("name" => "service01-shard-1.scalingo.test", "shard" => "shard-1", "uuid" => "uuid-shard-1")
@@ -122,7 +122,7 @@ RSpec.describe EtcdDiscovery::Service do
 
   describe "#one" do
     it "should return one of the hosts" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", host, 2)
       service = subject.get("service01")
       host = service.one
@@ -131,7 +131,7 @@ RSpec.describe EtcdDiscovery::Service do
     end
 
     it "should return one of the hosts from the requested shard" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", [
         host.merge("name" => "service01-shard-0.scalingo.test", "shard" => "shard-0", "uuid" => "uuid-shard-0"),
         host.merge("name" => "service01-shard-1.scalingo.test", "shard" => "shard-1", "uuid" => "uuid-shard-1")
@@ -143,14 +143,14 @@ RSpec.describe EtcdDiscovery::Service do
 
   describe "#to_uri" do
     it "should get the URI of one of the hosts if private" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", host, 1)
       service = subject.get("service01")
       expect(service.to_uri.to_s).to eq "https://user:secret@service01-0.scalingo.test:5000"
     end
 
     it "should get the URI of one of the hosts with redacted password" do
-      mock_not_found("service01")
+      mock_service_not_found("service01")
       mock_hosts("service01", host, 1)
       service = subject.get("service01")
       expect(service.to_s).to eq "https://user:REDACTED@service01-0.scalingo.test:5000"

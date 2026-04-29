@@ -1,6 +1,7 @@
 ## To be released
 
-* Add optional shard support to host registration and service lookups
+* feat: Add optional shard support to host registration and service lookups
+* chore: Rename `mock_not_found` test helper to `mock_service_not_found`
 
 ## v1.1.1 - 17 Dec 2024
 
