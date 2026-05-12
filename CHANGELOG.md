@@ -1,7 +1,17 @@
 ## To be released
 
+## v1.2.0 - 12 May 2026
+
+* build: move Dependabot reviewers to CODEOWNERS
+* build(deps-dev): bump rexml from 3.3.6 to 3.4.2
+* feat(asgard): update team to UFS
+* build(CODEOWNERS): assign UFS for Gemfile and Dependabot's PRs
+* refactor(workflows): use the new action
+* build(deps-dev): bump addressable from 2.8.0 to 2.9.0
+* build: Add CI
 * feat: Add optional shard support to host registration and service lookups
 * chore: Rename `mock_not_found` test helper to `mock_service_not_found`
+* build(deps): bump actions/checkout from 4 to 6
 
 ## v1.1.1 - 17 Dec 2024
 
