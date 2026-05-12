@@ -1,7 +1,7 @@
 etcd-discovery-ruby
 ==================
 
-Ruby gem implementing etcd-discovery
+Ruby gem implementing etcd-discovery.
 
 ### Configure etcd client
 
@@ -93,6 +93,7 @@ registration.password # The current password (it can change at any time)
 ```
 
 ### Release a New Version
+
 Bump new version number in:
 - `CHANGELOG.md`
 - `README.md`
@@ -100,7 +101,7 @@ Bump new version number in:
 Commit, tag and create a new release:
 
 ```bash
-version="1.1.1"
+version="1.2.0"
 
 git switch --create release/${version}
 git add CHANGELOG.md README.md etcd-discovery.gemspec
