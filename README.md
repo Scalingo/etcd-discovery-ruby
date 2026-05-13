@@ -101,7 +101,7 @@ Bump new version number in:
 Commit, tag and create a new release:
 
 ```bash
-version="1.2.0"
+version="1.2.1"
 
 git switch --create release/${version}
 git add CHANGELOG.md README.md etcd-discovery.gemspec
