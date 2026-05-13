@@ -1,5 +1,7 @@
 ## To be released
 
+* chore(license): Switch license from BSD 2-Clause "Simplified" to Apache 2.0
+
 ## v1.2.0 - 12 May 2026
 
 * build: move Dependabot reviewers to CODEOWNERS
