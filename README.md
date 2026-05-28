@@ -47,6 +47,19 @@ EtcdDiscovery.get("service").to_uri
 If the service is public, this returns the URI stored in `/services_infos/<service>`.
 Otherwise, it returns the URI of one registered host.
 
+> [!WARNING]
+> Calling `to_s` directly on a host or collection does not expose credentials: the password is redacted.
+>
+> Use `to_uri` or `to_private_uri` before calling `to_s` when you need the full URI with credentials.
+
+| Code                                                 | Password Redacted |
+|------------------------------------------------------|-------------------|
+| `EtcdDiscovery.get("app-scheduler").one.to_uri`      | No                |
+| `EtcdDiscovery.get("app-scheduler").one.to_uri.to_s` | No                |
+| `EtcdDiscovery.get("app-scheduler").to_uri`          | No                |
+| `EtcdDiscovery.get("app-scheduler").one.to_s`        | Yes               |
+| `EtcdDiscovery.get("app-scheduler").to_s`            | Yes               |
+
 ### Get the URI of one shard
 
 ```ruby
