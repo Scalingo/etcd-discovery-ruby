@@ -1,11 +1,11 @@
-etcd-discovery-ruby
+etcd-discovery-ruby v1.2.1
 ==================
 
 Ruby gem implementing etcd-discovery.
 
 ### Configure etcd client
 
-Default client isn't using SSL and tries http://localhost:4001
+Default client does not use SSL and connects to `http://localhost:2379`.
 
 ```ruby
 EtcdDiscovery.configure do |config|
@@ -13,8 +13,8 @@ EtcdDiscovery.configure do |config|
   config.cacert = "/etc/ssl/cacert.pem"            # nil
   config.ssl_key = "/etc/ssl/service/private.key"  # nil
   config.ssl_cert = "/etc/ssl/service/public.cert" # nil
-  config.host = "myhost"                           # Default: "localhost"
-  config.port = 4002                               # Default: 4001
+  config.host = "etcd-host"                        # Default: "localhost"
+  config.port = 2379                               # Default: 2379
   config.register_ttl = 5                          # Default: 10
   config.register_renew = 4                        # Default: 8
 end
@@ -38,11 +38,27 @@ hosts.each do |h|
 end
 ```
 
-### Get the service public uri
+### Get the service URI
 
 ```ruby
-EtcdDiscovery.get('service').to_uri
+EtcdDiscovery.get("service").to_uri
 ```
+
+If the service is public, this returns the URI stored in `/services_infos/<service>`.
+Otherwise, it returns the URI of one registered host.
+
+> [!WARNING]
+> Calling `to_s` directly on a host or collection does not expose credentials: the password is redacted.
+>
+> Use `to_uri` or `to_private_uri` before calling `to_s` when you need the full URI with credentials.
+
+| Code                                                 | Password Redacted |
+|------------------------------------------------------|-------------------|
+| `EtcdDiscovery.get("app-scheduler").one.to_uri`      | No                |
+| `EtcdDiscovery.get("app-scheduler").one.to_uri.to_s` | No                |
+| `EtcdDiscovery.get("app-scheduler").to_uri`          | No                |
+| `EtcdDiscovery.get("app-scheduler").one.to_s`        | Yes               |
+| `EtcdDiscovery.get("app-scheduler").to_s`            | Yes               |
 
 ### Get the URI of one shard
 
@@ -50,23 +66,30 @@ EtcdDiscovery.get('service').to_uri
 EtcdDiscovery.get("service", shard: "shard-0").to_uri
 ```
 
-### Get the private_uri to one of the nodes
+### Get the URI of one registered node
 
 ```ruby
-EtcdDiscovery.get('service').one.to_uri
+EtcdDiscovery.get("service").one.to_uri
+```
+
+### Get the private URI of one registered node
+
+```ruby
+EtcdDiscovery.get("service").one.to_private_uri
 ```
 
 ### Register a service
 
-This will be run in a secondary thread.
+This returns an `EtcdDiscovery::Registrar` and starts the registration loop in a background thread.
+
 ```ruby
-EtcdDiscovery.register "service", {
-  'name' => "hostname",                         # Mandatory: The hostname of the service
-  'ports' => {                                  # Mandatory: The ports opened by the service
+registration = EtcdDiscovery.register "service", {
+  'name' => "hostname",                         # Mandatory: Hostname of where the service is deployed
+  'ports' => {                                  # Mandatory: Ports opened by the service
     'http'=> '80',
     'https' => '443'
   },
-  'user' => "testuser",                         # Optional: If your service use basic auth: the username to access your service
+  'user' => "testuser",                         # Optional: If your service use basic auth: the username to access your service
   'password' => "secret",                       # Optional: If your service use basic auth: the password to access your service
   'public' => true,                             # Optional: Is your service accessible via an external network (or via a load balancer). Setting this to true will enable credentials synchronization.
   'critical' => true,                           # Optional: Is your service critical? This is just a tag and have no impact on the registration process
@@ -77,13 +100,15 @@ EtcdDiscovery.register "service", {
     'https' => '80443'
   }
 }
+
+registration.stop
 ```
 
 ### Listen to credentials change
 
-When a service is public, user and password are synced across all the hosts of the service.
+When a service is public and has credentials, user and password are synced across all the hosts of the service.
 
-You can fetch the current user and password using the object returned by the register method.
+You can fetch the current user and password from the `EtcdDiscovery::Registrar` returned by `register`.
 
 ```ruby
 registration = EtcdDiscovery.register service, host
